@@ -1,8 +1,14 @@
+# Uncomment for profiling
+# zmodload zsh/zprof
+
 # If you come from bash you might have to change your $PATH.
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/ecoco/.oh-my-zsh
+export PATH="$(brew --prefix python@3)/bin:$PATH"
+export OWL=/Users/ecoco/Projects/owl;
+eval "$(/Users/ecoco/Projects/owl/bin/owl init -)"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
@@ -24,7 +30,7 @@ DEFAULT_USER="ecoco"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+export UPDATE_ZSH_DAYS=0
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -55,7 +61,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+# plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -88,5 +94,23 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # My Aliases
-alias openmonkeyp="open -a 'Google Chrome' 'https://sampleurl.com'"
-alias tailrest="tail -f /filepath"	
+function save-aws-login() {  eval $( $OWL/bin/owl aws-login $1 $2 ) ; echo 'AWS_SECRET_ACCESS_KEY='$AWS_SECRET_ACCESS_KEY'\nAWS_SESSION_TOKEN='$AWS_SESSION_TOKEN'\nAWS_ACCOUNT_ID='$AWS_ACCOUNT_ID'\nAWS_ACCESS_KEY_ID='$AWS_ACCESS_KEY_ID > $3; [[ $? -eq 0 ]] && echo "Saved AWS secrets to $3" || echo "Something went wrong, failed to save secrets to $3"};
+
+function aws-login() {  eval $( $OWL/bin/owl aws-login $@ ) ; };
+
+function change-realm() {  eval $( $OWL/bin/owl change-realm $@ ) ; };
+
+export NVM_DIR="$HOME/.nvm"
+#  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+#  [ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"
+
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/ecoco/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ecoco/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/ecoco/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ecoco/google-cloud-sdk/completion.zsh.inc'; fi
+
+echo "[[ $commands[kubectl] ]] && source <(kubectl completion zsh)" >> ~/.zshrc # add autocomplete permanently to your zsh shell
+# Uncomment for profiling
+#zprof[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
