@@ -1,0 +1,24 @@
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	remotebr = "!f() { \
+		git push origin --set-upstream $1; \
+      }; f"
+	overwritewith = "!f() { \
+		git fetch origin && git reset --hard origin/$1; \
+	}; f"
+	brfrompr = "!f() { \
+		git fetch origin refs/pull/$1/head:$2 && git co $2; \
+	}; f"
+	pushother = "!f() { \
+		git push local $1:$2; \
+	}; f"
+[user]
+	email = ecoco@twilio.com
+	name = ecoco
+[core]
+	editor = subl -n -w
+[color]
+	ui = true
